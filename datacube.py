@@ -10,7 +10,6 @@ import masks as mask
 import time
 
 
-
 def read_tif(fn):
     """Opens raw .TIF image and returns numpy array.
     Args:
@@ -124,6 +123,18 @@ def tensor_fft(tensor, s=5000):
     return fft
 
 
+def median_filter(tensor, device, size=1):
+    """
+    Median filter operation for nD tensor. Returns tensor, but performs operation using numpy.
+    :param tensor: torch tensor to apply median filter to
+    :param device: CUDA device
+    :param size: size of sliding window. Default is size = 1
+    :return: Median filtered tensor
+    """
+    median_np = ndimage.median_filter(tensor.cpu().numpy(), size=size)
+    return torch.from_numpy(median_np).to(device)
+
+
 def get_datacube(img_gpu, angles, step_size, q, out_fn, sigma_q, sigma_th, N, NN, device, dx, plot=False):
     """ Get intensity - theta 4D array. Saves 4D array output.
     Arguments:
@@ -212,7 +223,6 @@ def get_orientation_torch(fft, filters, device):
     return intensity_theta
 
 
-
 # Deprecated
 def powder_spectrum(img, s):
     """Returns powder spectra by calculating 2D Fast Fourier Transform of one image.
@@ -241,29 +251,6 @@ def get_image(fn, threshold, n_frames, step):
     total_time = time.time() - start_time
     print('"Get Image" time (s): ' + str(np.round(total_time, 2)))
     return image
-
-
-def stack_image(img_raw):
-    """Returns sum of n stacked images
-    Args:
-        img_raw: np array of (n, x, y) OR (x,y) size
-    Returns:
-        np array size (x,y)
-    """
-    den = len(img_raw.shape)
-    if den > 2:
-        return np.sum(img_raw, axis=0)
-    return img_raw
-
-
-def remove_image_bcg(image):
-    """Returns image with subtracted average intensity.
-    Args:
-        image: image to be processed (torch float 64 tensor)
-    Returns:
-        removed_bcg_image: image - np.mean(image).
-    """
-    return image - torch.mean(image)
 
 
 def normalize_image(image):
