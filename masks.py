@@ -30,7 +30,7 @@ def circular_mask(n_pixels, q_center, q_bandwidth, dx):
 
 def gaussian_q_filter(q, sigma_q, sigma_th, N, NN, dx):
 
-    q_pixels = q * (N / 2)
+    q_pixels = get_q_pixels(q, N)
     n = N * dx  # size of nano-image (in Angstrom)
     grid = np.linspace(-n / 2, n / 2, NN)  # Array centering
 
@@ -48,6 +48,10 @@ def gaussian_q_filter(q, sigma_q, sigma_th, N, NN, dx):
     matrix = matrix + ndimage.rotate(matrix, 180, reshape=False)
 
     return matrix
+
+
+def get_q_pixels(q, N):
+    return q * N/2
 
 
 def gaussian_ring(angles, q, sigma_q, sigma_th, N, NN, dx):
