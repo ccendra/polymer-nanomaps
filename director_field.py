@@ -10,7 +10,7 @@ def search_peaks(img_datacube, df_mean_datacube, df_std_datacube, factor, angles
     :param img_datacube: 4D datacube of integrated powder spectrum. Torch tensor.
     :param df_mean_datacube: 4d datacube of  mean of the dark reference. Torch tensor.
     :param df_std_datacube: 4d datacube of standard deviation of the dark reference. Torch tensor.
-    :param factor: how many std above?
+    :param factor: how many std above mean dark reference intensity
     :param angles: list of angles used for the datacube analysis
     :return peak_tensor: 2D bytes tensor with peak or no peak at each (x, y)
     :return orientation_map: 2D pandas with orientation angle. NA if no peak, theta (degrees) otherwise.

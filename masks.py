@@ -29,7 +29,8 @@ def circular_mask(n_pixels, q_center, q_bandwidth, dx):
 
 
 def gaussian_q_filter(q, sigma_q, sigma_th, N, NN, dx):
-
+    """
+    """
     q_pixels = get_q_pixels(q, N)
     n = N * dx  # size of nano-image (in Angstrom)
     grid = np.linspace(-n / 2, n / 2, NN)  # Array centering
@@ -51,6 +52,13 @@ def gaussian_q_filter(q, sigma_q, sigma_th, N, NN, dx):
 
 
 def get_q_pixels(q, N):
+    """Conversion of reciprocal space from angstroms to reciprocal pixel size
+    Arguments:
+        q: reciprocal space vector
+        N: size of reciprocal space image
+    Returns:
+        q_pixel: q in pixel size
+    """
     return q * N/2
 
 

@@ -18,15 +18,15 @@ def fft(img, size, q_contour_list=[], color='blue'):
         a = 0.5
         for q in q_contour_list:
             q_pixels = mask.get_q_pixels(q, size / 2)
-            ax.add_patch(plt.Circle((size / 2, size / 2), q_pixels, facecolor='none',
+            ax.add_patch(plt.Circle(((size-1) / 2, (size-1) / 2), q_pixels, facecolor='none',
                                     edgecolor=color, alpha=a, linewidth=1, linestyle=':'))
-            ax.annotate(str(np.round(q, 1)), xy=(size/2, size/2 + q_pixels), color=color, alpha=a, fontsize=12)
+            ax.annotate(str(np.round(q, 2)), xy=(size/2, size/2 + q_pixels), color=color, alpha=a, fontsize=12)
 
     ax.plot()  # Causes an auto scale update.
     plt.show()
 
 
-def hrtem(img, size=15, gamma=1):
+def hrtem(img, size=15, gamma=1, colorbar=True):
     """Plots HRTEM image in real space.
     Arguments:
         img: image numpy array. If using pyTorch tensor, must be send to cpu and converted to numpy.
@@ -37,5 +37,6 @@ def hrtem(img, size=15, gamma=1):
 
     plt.figure(figsize=(size, size))
     plt.imshow(gamma_corrected, cmap='gray')
-    plt.colorbar()
+    if colorbar:
+        plt.colorbar()
     plt.show()
