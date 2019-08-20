@@ -1,46 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import collections as mc
-
 import random
-
-from view_diffraction import *
-from matrix_masks import *
-from extras import *
-
-
-def compute_pi_intensity_matrix(dataset, q_min, q_max, q_per_pixel, angle_step):
-    n_images = dataset.attrs['n_images']
-    y_pixels = dataset.attrs['y_pixels']
-    x_pixels = dataset.attrs['x_pixels']
-    n_angles = int(180/angle_step)
-
-    # Generate masks
-    print('Generating Masks...')
-    pi_masks = pi_slice_masks(y_pixels, x_pixels, q_min, q_max, q_per_pixel, angle_step)
-
-    # Prepare output matrix
-    pi_matrix = np.zeros((n_images, n_angles))  # This is now 2D
-
-    # Integrate pi intensities
-    print('Integrating Intensities...')
-    progress_bar = ProgressBar(n_images)
-    for n in range(n_images):
-        image = np.array(dataset[:, :, n])
-        for i in range(n_angles):
-            mask = pi_masks[i]
-            if np.sum(mask) != 0:
-                intensity = np.sum(np.multiply(image, mask)) / np.sum(mask)
-                pi_matrix[n, i] = intensity
-        progress_bar.update(n)
-    return pi_matrix
+# from view_diffraction import *
+# from matrix_masks import *
+# from extras import *
 
 
 class FlowLine:
     def __init__(self, row, col, theta, intensity):
         # Theta must be given in degrees
         self.index = (row, col)
-        self.start_point = (row + 0.5, col + 0.5)  # Stay in coordinates of matrix.  Rotate and flip later.
+        self.start_point = (row + 0.5, col + 0.5)  # Stay in coordinates of matrix. Rotate and flip later.
         self.x, self.y = self.start_point
         self.theta = theta
         self.start_theta = theta
@@ -171,82 +142,60 @@ class FlowLine:
                 theta_list.append(theta)
                 # intensity_list.append(intensity)
 
+
                 # Enforce length limit to prevent infinite loops
                 if len(line) > 50:
                     # print('too long')
                     break
 
 
-def seed_lines(raw_matrix, maxes_only=True, min_spacing=5):
-    """Returns a list of x,y,theta values"""
-    # Set up variables
-    n_rows, n_cols, n_angles = raw_matrix.shape
+def seed_lines(intensity_map, orientation_map, max_intensity_df, angles, maxes_only=True, min_spacing=1):
+    """Returns list of seeds and numpy array with peak position as function of (x, y, angle).
+    Arguments:
+        intensity_map: (x,y,theta) numpy array datacube with intensity values
+        orientation_map: panda with angle or 'nan' if no peak at gridpoint (x,y)
+        max_intensity: panda with maximum intensity. Zero if no peak at gridpoint (x, y)
+        angles: numpy list of angles
+        maxes_only: boolean. Seed lines only for maximum intensity peak.
+        min_spacing: Case of seeding lines for multiple peaks. Integer defines minimum angular separation (in terms of
+        angular steps) present between two peaks.
+    Returns:
+        peaks_matrix: numpy array with ones denoting if there is a peak at each (x, y, theta)
+        line_seeds: list of FlowLine collections
+    """
+    # Set up parameters
+    n_rows, n_cols, n_angles = intensity_map.shape
     peaks_matrix = np.zeros((n_rows, n_cols, n_angles))
     line_seeds = []
     angle_step = int(180 / n_angles)
 
-    # Subtract background and smooth matrix
-    # sub_matrix = subtract_min_as_background(raw_matrix, 2)
-    sub_matrix = raw_matrix
-
     # Generate peaks matrix
     for row in range(n_rows):
         for col in range(n_cols):
-            for angle in range(n_angles):
-                if sub_matrix[row, col, angle] > 0:
-                    # Resolve maxes-only keyword if true
-                    if maxes_only:
-                        if sub_matrix[row, col, angle] == np.max(sub_matrix[row, col, :]):
-                            # Otherwise, proceed to record the value of the peak
-                            intensity = sub_matrix[row, col, angle]
-                            new = FlowLine(row, col, angle * angle_step, intensity)  # Angle in Degrees
-                            line_seeds.append(new)
-                            # If you want to increase seeding density in the future, add a for loop here
-                            peaks_matrix[row, col, angle] = 1
-                    # Resolve min_spacing keyword if nonzero
-                    # """
-                    elif min_spacing:
-                        padded_matrix = np.pad(sub_matrix[row, col, :], (n_angles, n_angles), 'wrap')
-                        spacing_matrix = padded_matrix[
-                                         angle + n_angles - min_spacing: angle + n_angles + min_spacing]
-                        if any(spacing_matrix) and sub_matrix[row, col, angle] == np.max(spacing_matrix):
-                            # Otherwise, proceed to record the value of the peak
-                            intensity = sub_matrix[row, col, angle]
-                            new = FlowLine(row, col, angle * angle_step, intensity)  # Angle in Degrees
-                            peaks_matrix[row, col, angle] = 1
-                            line_seeds.append(new)
-                            # If you want to increase seeding density in the future, add a for loop here
-                    # """
-    return line_seeds, peaks_matrix
-
-
-def seed_lines_v2(datacube, df_mean, df_std, factor):
-    """
-    Returns a list of x, y, theta values.
-    :param datacube: 4d datacube
-    :param df_mean: 4d datacube of  mean of the dark reference
-    :param df_std: 4d datacube of standard deviation of the dark reference
-    :param factor: how many std above?
-    :return:
-    """
-    # Set up variables
-    n_rows, n_cols, n_angles = datacube.shape
-    # peaks_matrix = np.zeros((n_rows, n_cols, n_angles))
-    line_seeds = []
-
-    threshold = df_mean + factor * df_std
-    condition_matrix = datacube > threshold.double()
-
-    peaks_matrix = datacube * condition_matrix.double()
-
-    # Generate peaks matrix
-    # for row in range(n_rows):
-    #     for col in range(n_cols):
-    #         for angle in range(n_angles):
-    #             peaks_matrix[row, col, angle] = datacube[row, col, angle] * (datacube[row, col, angle] > df_mean[angle] + factor * df_std[angle])
+            # Case of only maximum intensity angle
+            if maxes_only:
+                intensity = max_intensity_df.iloc[row, col]
+                if intensity > 0:
+                    angle_index = int(orientation_map.iloc[row, col])
+                    # Create new seed for a line and append to line_seeds
+                    new = FlowLine(row, col, angles[angle_index], intensity)
+                    line_seeds.append(new)
+                    # Label presence of peak
+                    peaks_matrix[row, col, angle_index] = 1
+            # Case of multiple peaks
+            elif min_spacing:
+                for angle in range(n_angles):
+                    # pad start and end with intensities
+                    padded_matrix = np.pad(intensity_map[row, col, :], (n_angles, n_angles), 'wrap')
+                    # select spacing matrix and find maximum, then append to list of seed lines.
+                    spacing_matrix = padded_matrix[angle + n_angles - min_spacing: angle + n_angles + min_spacing]
+                    if any(spacing_matrix) and intensity_map[row, col, angle] == np.max(spacing_matrix):
+                        intensity = intensity_map[row, col, angle]
+                        new = FlowLine(row, col, angle * angle_step, intensity)  # Angle in Degrees
+                        peaks_matrix[row, col, angle] = 1
+                        line_seeds.append(new)
 
     return line_seeds, peaks_matrix
-
 
 
 def color_by_angle(theta):
@@ -257,7 +206,7 @@ def color_by_angle(theta):
     return (red, green, blue)
 
 
-def trim_and_color(line_seeds, rotated_matrix, min_length, figsize, window=False, window_shape = False, intensities=True):
+def trim_and_color(line_seeds, rotated_matrix, min_length, size, title, linewidth, window=False, window_shape = False, intensities=True):
     n_rows, n_col, n_angles = rotated_matrix.shape
     if window_shape:
         x1, x2, y1, y2 = window_shape
@@ -354,39 +303,61 @@ def trim_and_color(line_seeds, rotated_matrix, min_length, figsize, window=False
     colors_to_print.append((0.4, 0.4, 0.6))
 
     if intensities:
-        quick_line_plot(lines_to_print, figsize, linewidths=intensities_to_print, colors=colors_to_print)
+        quick_line_plot(lines_to_print, size, title, linewidth, linewidths=intensities_to_print, colors=colors_to_print)
     else:
-        quick_line_plot(lines_to_print, figsize, linewidth=1, colors=colors_to_print)
-
-    plt.autoscale(enable=True, axis='y')
-    plt.autoscale(enable=True, axis='x')
-
+        quick_line_plot(lines_to_print, size, title, linewidth, colors=colors_to_print)
+    #
+    # plt.autoscale(enable=True, axis='y')
+    # plt.autoscale(enable=True, axis='x')
 
 
 def distance_2d(p1, p2):
+    """Returns distance between two 2D vectors."""
     return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
 
-def quick_line_plot(lines, figsize, linewidth=0.2, linewidths=False, colors=False):
-    fig, ax = plt.subplots(figsize=figsize)
+def quick_line_plot(lines, size, title, linewidth, linewidths=False, colors=False):
+    """Plot collection of seeds as lines in a pyplot.
+    Arguments:
+        lines: collection of seed lines
+        size: figure size
+        title: plot title (optional)
+        linewidth: width of lines
+        linewidths: boolean asks if width of lines depends on intensity
+        colors: boolean asks if using different colors for different lines. If not false, composed of list of colors.
+    """
+    fig, ax = plt.subplots(figsize=(size, size))
     if colors and linewidths:
         line_plot = mc.LineCollection(lines, linewidths=linewidths, colors=colors)
     elif colors:
         line_plot = mc.LineCollection(lines, linewidth=linewidth, colors=colors)
     else:
         line_plot = mc.LineCollection(lines, linewidth=linewidth)
+
     ax.add_collection(line_plot)
+    plt.autoscale(enable=True, axis='both', tight=True)
+    plt.title(title)
+    plt.savefig(title + '.png', dpi=300, transparent=True)
+    plt.show()
 
 
-def preview_line_plot(line_seeds,figsize, **kwargs):
+def preview_line_plot(line_seeds, size, title='', linewidth=0.2, **kwargs):
+    """" Unpacks list of seeded lines and plots initial seeds.
+    Arguments:
+        line_seeds: list of seed class objects
+        size: size of plot
+        title: plot title (optional)
+        linewidth: linewidth of drawn lines
+        **kwargs: additional optional arguments
+    """
     lines_to_print = []
+    # Unpack seeds
     for seed in line_seeds:
         for line in seed.lines:
             lines_to_print.append(line)
 
-    quick_line_plot(lines_to_print, figsize, *kwargs)
-    plt.autoscale(enable=True, axis='y')
-    plt.autoscale(enable=True, axis='x')
+    # Plot seeds
+    quick_line_plot(lines_to_print, size, title, linewidth, *kwargs)
 
 
 def integrate_pi(image, pi_slice_masks):
@@ -398,6 +369,7 @@ def integrate_pi(image, pi_slice_masks):
     # Scale amplitudes to fit in hdf5 file
     return amplitudes
 
+
 def normalize_1D(array, axis):
     # maxes = np.argmax(array, axis=axis)
     # normalized_array = np.divide(array, maxes)
@@ -406,6 +378,7 @@ def normalize_1D(array, axis):
     new_array = array/array.sum(axis=2, keepdims=1).astype(np.float)
     return new_array
 
+
 def subtract_average_by_point(array, axis):
     # maxes = np.argmax(array, axis=axis)
     # normalized_array = np.divide(array, maxes)
@@ -413,6 +386,7 @@ def subtract_average_by_point(array, axis):
     # maxes = array.sum(axis=axis, keepdims = 1)
     new_array = array - array.mean(axis=2, keepdims=1).astype(np.float)
     return new_array
+
 
 def subtract_min_as_background(array, axis, verbose=False):
     new_array = array - array.min(axis=2, keepdims=1).astype(np.float)
@@ -423,3 +397,78 @@ def subtract_min_as_background(array, axis, verbose=False):
             quick_heat_plot(array[:,:,n])
             quick_heat_plot(new_array[:,:,n])
     return new_array
+
+
+# deprecated
+# def seed_lines(raw_matrix, maxes_only=True, min_spacing=5):
+#     """Returns a list of x,y,theta values"""
+#     start_time = time.time()
+#
+#     # Set up variables
+#     n_rows, n_cols, n_angles = raw_matrix.shape
+#     peaks_matrix = np.zeros((n_rows, n_cols, n_angles))
+#     line_seeds = []
+#     angle_step = int(180 / n_angles)
+#
+#     # Subtract background and smooth matrix
+#     # sub_matrix = subtract_min_as_background(raw_matrix, 2)
+#     sub_matrix = raw_matrix
+#
+#     # Generate peaks matrix
+#     for row in range(n_rows):
+#         for col in range(n_cols):
+#             for angle in range(n_angles):
+#                 if sub_matrix[row, col, angle] > 0:
+#                     # Resolve maxes-only keyword if true
+#                     if maxes_only:
+#                         if sub_matrix[row, col, angle] == np.max(sub_matrix[row, col, :]):
+#                             # Otherwise, proceed to record the value of the peak
+#                             intensity = sub_matrix[row, col, angle]
+#                             new = FlowLine(row, col, angle * angle_step, intensity)  # Angle in Degrees
+#                             line_seeds.append(new)
+#                             # If you want to increase seeding density in the future, add a for loop here
+#                             peaks_matrix[row, col, angle] = 1
+#                     # Resolve min_spacing keyword if nonzero
+#                     # """
+#                     elif min_spacing:
+#                         padded_matrix = np.pad(sub_matrix[row, col, :], (n_angles, n_angles), 'wrap')
+#                         spacing_matrix = padded_matrix[
+#                                          angle + n_angles - min_spacing: angle + n_angles + min_spacing]
+#                         if any(spacing_matrix) and sub_matrix[row, col, angle] == np.max(spacing_matrix):
+#                             # Otherwise, proceed to record the value of the peak
+#                             intensity = sub_matrix[row, col, angle]
+#                             new = FlowLine(row, col, angle * angle_step, intensity)  # Angle in Degrees
+#                             peaks_matrix[row, col, angle] = 1
+#                             line_seeds.append(new)
+#                             # If you want to increase seeding density in the future, add a for loop here
+#                     # """
+#     print('processing time: ' + str(time.time() - start_time))
+#
+#     return line_seeds, peaks_matrix
+
+
+# def compute_pi_intensity_matrix(dataset, q_min, q_max, q_per_pixel, angle_step):
+#     n_images = dataset.attrs['n_images']
+#     y_pixels = dataset.attrs['y_pixels']
+#     x_pixels = dataset.attrs['x_pixels']
+#     n_angles = int(180/angle_step)
+#
+#     # Generate masks
+#     print('Generating Masks...')
+#     pi_masks = pi_slice_masks(y_pixels, x_pixels, q_min, q_max, q_per_pixel, angle_step)
+#
+#     # Prepare output matrix
+#     pi_matrix = np.zeros((n_images, n_angles))  # This is now 2D
+#
+#     # Integrate pi intensities
+#     print('Integrating Intensities...')
+#     progress_bar = ProgressBar(n_images)
+#     for n in range(n_images):
+#         image = np.array(dataset[:, :, n])
+#         for i in range(n_angles):
+#             mask = pi_masks[i]
+#             if np.sum(mask) != 0:
+#                 intensity = np.sum(np.multiply(image, mask)) / np.sum(mask)
+#                 pi_matrix[n, i] = intensity
+#         progress_bar.update(n)
+#     return pi_matrix

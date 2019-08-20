@@ -2,17 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ced546ba-7281-4511-8934-5ab6bb876b72" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/polymer-nanomaps.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/remote-mappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/director_field.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/extras.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/flow_fields.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/datacube.py" beforeDir="false" afterPath="$PROJECT_DIR$/datacube.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/director_field.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/extras.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flow_fields.py" beforeDir="false" afterPath="$PROJECT_DIR$/flow_fields.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/masks.py" beforeDir="false" afterPath="$PROJECT_DIR$/masks.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,50 +16,14 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/datacube.py">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/plot_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-311">
-              <caret line="136" lean-forward="true" selection-start-line="136" selection-end-line="136" />
+            <state relative-caret-position="255">
+              <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/extras.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1938">
-              <caret line="114" selection-start-line="114" selection-end-line="114" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/director_field.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" selection-start-line="39" selection-end-line="39" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/flow_fields.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6648">
-              <caret line="403" column="68" lean-forward="true" selection-start-line="403" selection-start-column="68" selection-end-line="403" selection-end-column="68" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -85,23 +44,11 @@
       </list>
     </option>
   </component>
-  <component name="ProjectConfigurationFiles">
-    <option name="files">
-      <list>
-        <option value="$PROJECT_DIR$/.idea/polymer-nanomaps.iml" />
-        <option value="$PROJECT_DIR$/.idea/misc.xml" />
-        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
-        <option value="$PROJECT_DIR$/.idea/modules.xml" />
-        <option value="$PROJECT_DIR$/.idea/deployment.xml" />
-        <option value="$PROJECT_DIR$/.idea/remote-mappings.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" />
-      </list>
-    </option>
-  </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1582" />
-    <option name="width" value="2267" />
-    <option name="height" value="2171" />
+    <option name="x" value="346" />
+    <option name="y" value="55" />
+    <option name="width" value="2600" />
+    <option name="height" value="2172" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -162,28 +109,22 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1565576865104</updated>
-      <workItem from="1565576875521" duration="3814000" />
+      <workItem from="1565576875521" duration="4442000" />
+      <workItem from="1566271161796" duration="909000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3814000" />
+    <option name="totallyTimeSpent" value="5351000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1055" y="0" width="1511" height="1447" extended-state="0" />
+    <frame x="231" y="37" width="1733" height="1448" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.18788713" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.17014925" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info id="Remote Host" order="3" weight="0.3299389" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Version Control" sideWeight="0.49833888" visible="true" weight="0.32978722" />
-      <window_info anchor="bottom" id="Python Console" sideWeight="0.49916944" weight="0.32978722" />
-      <window_info anchor="bottom" id="Terminal" sideWeight="0.49916944" weight="0.32978722" />
-      <window_info anchor="bottom" id="Event Log" sideWeight="0.5008306" side_tool="true" weight="0.32978722" />
-      <window_info anchor="bottom" id="File Transfer" sideWeight="0.49916944" weight="0.331307" />
+      <window_info id="Remote Host" order="3" weight="0.32955223" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -191,6 +132,13 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49833888" weight="0.32953683" />
+      <window_info anchor="bottom" id="File Transfer" order="9" sideWeight="0.49916944" visible="true" weight="0.33105543" />
+      <window_info anchor="bottom" id="Database Changes" order="10" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49916944" weight="0.32978722" />
+      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5008306" side_tool="true" weight="0.32978722" />
+      <window_info anchor="bottom" id="Python Console" order="13" sideWeight="0.49916944" weight="0.32978722" />
       <window_info anchor="right" id="Database" order="0" />
       <window_info anchor="right" id="R Packages" order="1" show_stripe_button="false" />
       <window_info anchor="right" id="SciView" order="2" />
@@ -207,40 +155,25 @@
     <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/flow_fields_CC.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="40" lean-forward="true" selection-start-line="26" selection-start-column="40" selection-end-line="27" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/datacube.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-311">
-          <caret line="136" lean-forward="true" selection-start-line="136" selection-end-line="136" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/extras.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1938">
-          <caret line="114" selection-start-line="114" selection-end-line="114" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+    <entry file="file://$PROJECT_DIR$/flow_fields_CC.py" />
+    <entry file="uml://AlchemyModelDependency/#polymer-nanomaps">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>AlchemyModelDependency</ID>
+          <OriginalElement>#polymer-nanomaps</OriginalElement>
+          <nodes />
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="1.0" x="240.0" y="240.0" />
+          <SelectedNodes />
+          <Categories />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/director_field.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
+        <state relative-caret-position="476">
+          <caret line="28" column="40" lean-forward="true" selection-start-line="28" selection-start-column="40" selection-end-line="28" selection-end-column="40" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -249,10 +182,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/flow_fields.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6648">
-          <caret line="403" column="68" lean-forward="true" selection-start-line="403" selection-start-column="68" selection-end-line="403" selection-end-column="68" />
+        <state relative-caret-position="-2958">
+          <caret line="9" column="15" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/extras.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="799">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/datacube.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="116" selection-start-line="116" selection-end-line="116" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plot_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="31" lean-forward="true" selection-start-line="15" selection-start-column="31" selection-end-line="15" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
           </folding>
         </state>
       </provider>
