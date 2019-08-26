@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ced546ba-7281-4511-8934-5ab6bb876b72" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Camila.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automated_processing_functions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/automated_script.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/polymer-nanomaps.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/polymer-nanomaps.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/datacube.py" beforeDir="false" afterPath="$PROJECT_DIR$/datacube.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flow_fields.py" beforeDir="false" afterPath="$PROJECT_DIR$/flow_fields.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/director_field.py" beforeDir="false" afterPath="$PROJECT_DIR$/director_field.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/masks.py" beforeDir="false" afterPath="$PROJECT_DIR$/masks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plot_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_functions.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,6 +19,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/plot_functions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="629">
+              <caret line="41" column="14" lean-forward="true" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plot_functions_script.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -30,10 +43,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/automated_processing_functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
+            <state relative-caret-position="850">
               <caret line="50" column="109" lean-forward="true" selection-start-line="50" selection-start-column="109" selection-end-line="50" selection-end-column="109" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
@@ -183,19 +196,18 @@
       <workItem from="1566271161796" duration="3513000" />
       <workItem from="1566529369949" duration="1917000" />
       <workItem from="1566686158993" duration="12736000" />
-      <workItem from="1566705499829" duration="13695000" />
+      <workItem from="1566705499829" duration="13986000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36303000" />
+    <option name="totallyTimeSpent" value="36594000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="62" y="0" width="1075" height="1447" extended-state="0" />
-    <editor active="true" />
+    <frame x="55" y="-7" width="2513" height="1455" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" weight="0.20666014" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.08553971" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info id="Remote Host" order="3" weight="0.32955223" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -207,7 +219,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49833888" weight="0.32953683" />
-      <window_info active="true" anchor="bottom" id="File Transfer" order="9" sideWeight="0.49916944" visible="true" weight="0.3343465" />
+      <window_info anchor="bottom" id="File Transfer" order="9" sideWeight="0.49916944" visible="true" weight="0.3323263" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49916944" weight="0.32978722" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50101835" side_tool="true" weight="0.31797582" />
@@ -259,26 +271,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/automated_script.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2159">
-          <caret line="127" column="37" lean-forward="true" selection-start-line="127" selection-start-column="37" selection-end-line="127" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/flow_fields.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="439">
@@ -318,8 +310,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/automated_processing_functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
+        <state relative-caret-position="850">
           <caret line="50" column="109" lean-forward="true" selection-start-line="50" selection-start-column="109" selection-end-line="50" selection-end-column="109" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/automated_script.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2159">
+          <caret line="127" column="37" lean-forward="true" selection-start-line="127" selection-start-column="37" selection-end-line="127" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plot_functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="41" column="14" lean-forward="true" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
           <folding>
             <element signature="e#0#22#0" expanded="true" />
           </folding>
