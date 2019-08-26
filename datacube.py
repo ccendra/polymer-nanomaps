@@ -159,8 +159,8 @@ def get_datacube(img_gpu, angles, step_size, q, out_fn, sigma_q, sigma_th, N, NN
     for i in range(N, m + 1, step_size):
         j0 = 0
         col = 0
-        if row % 50 == 0:
-            print('row: ', row)
+        # if row % 50 == 0:
+            # print('row: ', row)
         for j in range(N, n + 1, step_size):
             mini = normalize_tensor(img_gpu[i0:i, j0:j])
             window_mini = mini * hanning_window
@@ -180,7 +180,7 @@ def get_datacube(img_gpu, angles, step_size, q, out_fn, sigma_q, sigma_th, N, NN
         i0 += step_size
         row += 1
 
-    print('Processing time to get 4D datacube [seconds]: ' + str(time.time() - start_time))
+    # print('Processing time to get 4D datacube [seconds]: ' + str(time.time() - start_time))
     np.save(out_fn, matrix.cpu().numpy())
 
     return matrix

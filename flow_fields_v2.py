@@ -149,10 +149,13 @@ class FlowLine:
                     break
 
 
-def seed_lines(intensity_map, maxes_only=True, min_spacing=5):
+def seed_lines(intensity_map, orientation_map, max_intensity, angles, maxes_only=True, min_spacing=2):
     """Returns list of seeds and numpy array with peak position as function of (x, y, angle).
     Arguments:
         intensity_map: (x,y,theta) numpy array datacube with intensity values
+        orientation_map: numpy array with angle or 'nan' if no peak at gridpoint (x,y)
+        max_intensity: numpy array with maximum intensity. Zero if no peak at gridpoint (x, y)
+        angles: numpy list of angles
         maxes_only: boolean. Seed lines only for maximum intensity peak.
         min_spacing: Case of seeding lines for multiple peaks. Integer defines minimum angular separation (in terms of
         angular steps) present between two peaks.
@@ -160,6 +163,43 @@ def seed_lines(intensity_map, maxes_only=True, min_spacing=5):
         peaks_matrix: numpy array with ones denoting if there is a peak at each (x, y, theta)
         line_seeds: list of FlowLine collections
     """
+    # Set up parameters
+    n_rows, n_cols, n_angles = intensity_map.shape
+    peaks_matrix = np.zeros((n_rows, n_cols, n_angles))
+    line_seeds = []
+    angle_step = int(180 / n_angles)
+
+    # Generate peaks matrix
+    for row in range(n_rows):
+        for col in range(n_cols):
+            # Case of only maximum intensity angle
+            if maxes_only:
+                intensity = max_intensity[row, col]
+                if intensity > 0:
+                    angle_index = int(orientation_map[row, col])
+                    # Create new seed for a line and append to line_seeds
+                    new = FlowLine(row, col, angles[angle_index], intensity)
+                    line_seeds.append(new)
+                    # Label presence of peak
+                    peaks_matrix[row, col, angle_index] = 1
+            # Case of multiple peaks
+            elif min_spacing:
+                for angle in range(n_angles):
+                    # pad start and end with intensities
+                    padded_matrix = np.pad(intensity_map[row, col, :], (n_angles, n_angles), 'wrap')
+                    # select spacing matrix and find maximum, then append to list of seed lines.
+                    spacing_matrix = padded_matrix[angle + n_angles - min_spacing: angle + n_angles + min_spacing]
+                    if any(spacing_matrix) and intensity_map[row, col, angle] == np.max(spacing_matrix):
+                        intensity = intensity_map[row, col, angle]
+                        new = FlowLine(row, col, angle * angle_step, intensity)  # Angle in Degrees
+                        peaks_matrix[row, col, angle] = 1
+                        line_seeds.append(new)
+
+    return line_seeds, peaks_matrix
+
+
+def seed_lines_v2(intensity_map, maxes_only=True, min_spacing=5):
+    """Returns a list of x,y,theta values"""
     # Set up variables
     n_rows, n_cols, n_angles = intensity_map.shape
     peaks_matrix = np.zeros((n_rows, n_cols, n_angles))
@@ -201,14 +241,14 @@ def seed_lines(intensity_map, maxes_only=True, min_spacing=5):
 
 
 def color_by_angle(theta):
-    radians = theta * 3.1416 / 180
+    radians = theta * 3.14 / 180
     red = np.cos(radians) ** 2  # Range is max 1 not max 255
     green = np.cos(radians + 3.14 / 3) ** 2 * 0.7  # Makes green darker - helps it stand out equally to r and b
     blue = np.cos(radians + 2 * 3.14 / 3) ** 2
     return (red, green, blue)
 
 
-def trim_and_color(line_seeds, rotated_matrix, min_length, figsize, window=False, window_shape = False, intensities=True):
+def trim_and_color(line_seeds, rotated_matrix, min_length, size, title, linewidth, window=False, window_shape = False, intensities=True):
     n_rows, n_col, n_angles = rotated_matrix.shape
     if window_shape:
         x1, x2, y1, y2 = window_shape
@@ -223,7 +263,7 @@ def trim_and_color(line_seeds, rotated_matrix, min_length, figsize, window=False
     space_filling = np.zeros((n_rows * point_density, n_col * point_density, n_angles))
 
     # Trim lines to achieve desired visual spacing
-    # print('Trimming Lines...')
+    print('Trimming Lines...')
     position_spacing = 1
     theta_spacing = 15
 
@@ -305,9 +345,9 @@ def trim_and_color(line_seeds, rotated_matrix, min_length, figsize, window=False
     colors_to_print.append((0.4, 0.4, 0.6))
 
     if intensities:
-        quick_line_plot(lines_to_print, figsize, linewidths=intensities_to_print, colors=colors_to_print)
+        quick_line_plot(lines_to_print, size, title, linewidth, linewidths=intensities_to_print, colors=colors_to_print)
     else:
-        quick_line_plot(lines_to_print, figsize, linewidth=1, colors=colors_to_print)
+        quick_line_plot(lines_to_print, size, title, linewidth, colors=colors_to_print)
     #
     # plt.autoscale(enable=True, axis='y')
     # plt.autoscale(enable=True, axis='x')
@@ -318,11 +358,12 @@ def distance_2d(p1, p2):
     return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
 
 
-def quick_line_plot(lines, size, linewidth=0.2, linewidths=False, colors=False):
+def quick_line_plot(lines, size, title, linewidth, linewidths=False, colors=False):
     """Plot collection of seeds as lines in a pyplot.
     Arguments:
         lines: collection of seed lines
         size: figure size
+        title: plot title (optional)
         linewidth: width of lines
         linewidths: boolean asks if width of lines depends on intensity
         colors: boolean asks if using different colors for different lines. If not false, composed of list of colors.
@@ -337,9 +378,24 @@ def quick_line_plot(lines, size, linewidth=0.2, linewidths=False, colors=False):
 
     ax.add_collection(line_plot)
     ax.autoscale(enable=True, axis='both', tight=True)
+    # plt.title(title)
+    # plt.savefig(title + '.png', dpi=300, transparent=True)
+    # plt.show()
 
 
-def preview_line_plot(line_seeds, size=10, linewidth=0.2, **kwargs):
+def quick_line_plot_v2(lines, figsize, linewidth=0.2, linewidths=False, colors=False):
+    fig, ax = plt.subplots(figsize=figsize)
+    if colors and linewidths:
+        line_plot = mc.LineCollection(lines, linewidths=linewidths, colors=colors)
+    elif colors:
+        line_plot = mc.LineCollection(lines, linewidth=linewidth, colors=colors)
+    else:
+        line_plot = mc.LineCollection(lines, linewidth=linewidth)
+    ax.add_collection(line_plot)
+    ax.autoscale(enable=True, axis='both', tight=True)
+
+
+def preview_line_plot(line_seeds, size, title='', linewidth=0.2, **kwargs):
     """" Unpacks list of seeded lines and plots initial seeds.
     Arguments:
         line_seeds: list of seed class objects
@@ -355,7 +411,18 @@ def preview_line_plot(line_seeds, size=10, linewidth=0.2, **kwargs):
             lines_to_print.append(line)
 
     # Plot seeds
-    quick_line_plot(lines_to_print, size, linewidth, *kwargs)
+    quick_line_plot(lines_to_print, size, title, linewidth, *kwargs)
+
+
+def preview_line_plot_v2(line_seeds, figsize, **kwargs):
+    lines_to_print = []
+    for seed in line_seeds:
+        for line in seed.lines:
+            lines_to_print.append(line)
+
+    quick_line_plot_v2(lines_to_print, figsize, *kwargs)
+    plt.autoscale(enable=True, axis='y')
+    plt.autoscale(enable=True, axis='x')
 
 
 def integrate_pi(image, pi_slice_masks):

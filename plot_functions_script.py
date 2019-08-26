@@ -25,10 +25,11 @@ def fft(img, size, q_contour_list=[], color='blue', savefig='', linewidth=0.4):
             ax.annotate(str(np.round(q, 2)), xy=(size/2, size/2 + q_pixels), color=color, alpha=a, fontsize=8)
 
     if savefig:
-        plt.savefig(savefig + '.png', transparent=True, dpi=600)
-
-    ax.plot()  # Causes an auto scale update.
-    plt.show()
+        plt.savefig(savefig + '.png', transparent=False, dpi=600)
+    #
+    # ax.plot()  # Causes an auto scale update.
+    # plt.show()
+    plt.close()
 
 
 def overlay_img_lines(img, lines, size, title, linewidth, linewidths=False, colors=False):
@@ -45,7 +46,8 @@ def overlay_img_lines(img, lines, size, title, linewidth, linewidths=False, colo
     plt.autoscale(enable=True, axis='both', tight=True)
     plt.title(title)
     plt.savefig(title + '.png', dpi=300, transparent=True)
-    plt.show()
+    # plt.show()
+    plt.close()
 
 
 def hrtem(img, size=15, gamma=1, vmax=0, colorbar=True, savefig=''):
@@ -66,9 +68,10 @@ def hrtem(img, size=15, gamma=1, vmax=0, colorbar=True, savefig=''):
     if colorbar:
         plt.colorbar()
     if savefig:
-        plt.savefig(savefig + '.png', transparent=True, dpi=600)
-
-    plt.show()
+        plt.savefig(savefig + '.png', transparent=False, dpi=600)
+    #
+    # plt.show()
+    plt.close()
 
 
 def subplot_mini(image, window_mini, fft_raw, fft_processed, title):
@@ -96,5 +99,6 @@ def subplot_mini(image, window_mini, fft_raw, fft_processed, title):
     plt.subplot(1, 4, 4)
     plt.imshow(fft_processed, cmap='gray')
     plt.title('FFT masked')
-    plt.show()
+    # plt.show()
+    plt.close()
 
